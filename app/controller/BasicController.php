@@ -53,7 +53,7 @@ namespace app\controller {
          * @RequestMapping(url="api/product/add/xml",method="POST")
          * @RequestParams(true)
          */
-        public function sampleApix($product_name = null, $pro_price = null)
+        public function addprodxml($product_name = null, $pro_price = null)
         {
 
             $product = R::dispense("productdetail");
@@ -132,36 +132,6 @@ EOF;
             $cid = R::store($cart);
             $cartdetail = R::findOne('cart',' id = ? ',array($cid));
            return $cartdetail;
-        }
-
-        /**
-         * @Description - XML Api
-         *
-         * @RequestMapping(url="api/product/buy/xml",method="POST")
-         * @RequestParams(true)
-         */
-        public function productbuyx($pro_id = null, $user_id =  null)
-        {
-            $prod = R::findOne('productdetail',' id = ? ',array($pro_id));
-            $cart = R::dispense("cart");
-            $cart['userid'] = $user_id;
-            $cart['prodid'] = $pro_id;
-            $cart['proname'] = $prod['proname'];
-            $cart['proprice'] = $prod['proprice'];
-            $cid = R::store($cart);
-            $cartdetail1 = R::findOne('cart',' id = ? ',array($cid));
-
-            header('Content-Type: text/xml; charset=utf-8');
-                echo <<<EOF
-<?xml version="1.0" encoding="utf-8"?>
-<usercart>
-<cartid>$cartdetail1['id']</cartid>
-<cartuserid>$cartdetail1['userid']</cartuserid>
-<cartprodid>$cartdetail1['prodid']</cartprodid>
-<cartprodname>$cartdetail1['proname']</cartprodname>
-<cartprodprice>$cartdetail1['proprice']</cartprodprice>
-</usercart>
-EOF;
         }
 
 
