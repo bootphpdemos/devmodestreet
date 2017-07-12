@@ -1,0 +1,27 @@
+{
+  "name": "rudrax/local.modstreet.com",
+  "type": "project",
+  "description": "My Rudrax Project",
+  "license": "proprietary",
+  "keywords": [
+  ],
+  "config" : {
+    "vendor-dir" : "lib"
+  },
+  "autoload": {
+    "psr-4": {
+      "app\\": "app/"
+    }
+  },
+  "require": {
+    "php": ">=5.5.0",
+    "bootphp/functions": "dev-master",
+    "bootphp/rudrax": "dev-master",
+    "rudrax/redbean": "^0.0.0"
+  },
+  "require-dev": {
+    "boilerplatez/docs" : "dev-master"
+  },
+  "scripts": {
+  }
+}
