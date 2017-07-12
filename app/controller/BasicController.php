@@ -47,6 +47,37 @@ namespace app\controller {
 
         }
 
+        /**
+         * @Description - XML Api
+         *
+         * @RequestMapping(url="api/product/add/xml",method="POST")
+         * @RequestParams(true)
+         */
+        public function addprodxml($product_name = null, $pro_price = null)
+        {
+
+            $product = R::dispense("productdetail");
+            $product['proname'] = $product_name;
+            $product['proprice'] = $pro_price;
+            $id = R::store($product);
+            header('Content-Type: text/xml; charset=utf-8');
+            echo <<<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<product>
+<productid>$id</productid>
+<productname>$product_name</productname>
+<productprice>$pro_price</productprice>
+</product>
+EOF;
+
+            // return array(
+            //     "id" => $id,
+            //     "Product Name" => $product_name,
+            //     "Product Price" => $pro_price
+            //);
+
+        }
+
          /**
          * @Description - Json Api
          *
@@ -60,6 +91,36 @@ namespace app\controller {
             return $prolist;
         }
 
+        /**
+         * @Description - xml Api
+         *
+         * @RequestMapping(url="api/product/list/xml",method="POST")
+         * @RequestParams(true)
+         */
+        public function productlistx()
+        {
+
+            $prolist = R::findAll( 'productdetail' , ' ORDER BY id ASC LIMIT 10 ' );
+            header('Content-Type: text/xml; charset=utf-8');
+             if (count($prolist)) {
+                    foreach ($prolist as $i => $prolist1) {
+            $sCode .= <<<EOF
+<unit>
+    <id>{$prolist1['id']}</id>
+    <productname>{$prolist1['proname']}</productname>
+    <productprice>{$prolist1['proprice']}</productprice>
+</unit>
+EOF;
+            }
+        }
+            echo <<<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<product>
+{$sCode}
+</product>
+EOF;
+            //return $prolist;
+        }
 
         /**
          * @Description - Json Api
