@@ -60,16 +60,19 @@ namespace app\controller {
             $product['proname'] = $product_name;
             $product['proprice'] = $pro_price;
             $id = R::store($product);
+            $proddetail = R::findOne('productdetail',' id = ? ',array($id));
+            $proid = $proddetail['id'];
+            $pronam = $proddetail['proname'];
+            $proprice = $proddetail['proprice'];
             header('Content-Type: text/xml; charset=utf-8');
             echo <<<EOF
 <?xml version="1.0" encoding="utf-8"?>
 <product>
-<productid>$id</productid>
-<productname>$product_name</productname>
-<productprice>$pro_price</productprice>
+<productid>$proid</productid>
+<productname>$pronam</productname>
+<productprice>$proprice</productprice>
 </product>
 EOF;
-
         }
 
          /**
@@ -81,7 +84,7 @@ EOF;
         public function productlist()
         {
 
-            $prolist = R::findAll( 'productdetail' , ' ORDER BY id DESC LIMIT 10 ' );
+            $prolist = R::findAll( 'productdetail' , ' ORDER BY id ASC LIMIT 10 ' );
             return $prolist;
         }
 
@@ -134,6 +137,41 @@ EOF;
            return $cartdetail;
         }
 
+         /**
+         * @Description - XML Api
+         *
+         * @RequestMapping(url="api/product/buy/xml",method="POST" )
+         * @RequestParams(true)
+         */
+        public function productbuyx($pro_id = null, $user_id =  null)
+        {
+            $prod = R::findOne('productdetail',' id = ? ',array($pro_id));
+            $cart = R::dispense("cart");
+            $cart['userid'] = $user_id;
+            $cart['prodid'] = $pro_id;
+            $cart['proname'] = $prod['proname'];
+            $cart['proprice'] = $prod['proprice'];
+            $cid = R::store($cart);
+            $cartdetail = R::findOne('cart',' id = ? ',array($cid));
+            $crtid = $cartdetail['id'];
+            $crtusrid = $cartdetail['userid'];
+            $crtprodid = $cartdetail['prodid'];
+            $crtprodnam = $cartdetail['proname'];
+            $crtprodprc = $cartdetail['proprice'];
+            header('Content-Type: text/xml; charset=utf-8');
+            echo <<<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<cart>
+<cartid>$crtid</cartid>
+<cartuserid>$crtusrid</cartuserid>
+<cartproductid>$crtprodid</cartproductid>
+<cartproductname>$crtprodnam</cartproductname>
+<cartproductprice>$crtprodprc</cartproductprice>
+</cart>
+EOF;
+
+           //return $cartdetail;
+        }
 
         /**
          * @Description - Default page
