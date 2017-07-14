@@ -26,27 +26,6 @@ namespace app\controller {
         }
 
         /**
-         * @Description - Products page
-         *
-         * @RequestMapping(url="products",method="GET",type="template")
-         * @RequestParams(true)
-         */
-        public function productsx($model = null, $userid = null)
-        {
-
-             $prolist = R::findAll( 'productdetail' , ' ORDER BY id ASC LIMIT 10' );
-            //return $prolist;
-            $profile = array(
-                "userid" => "789"
-            );
-
-           $model->assign("profile", $profile);
-           $model->assign("products", $prolist);
-
-            return "products";
-        }
-
-        /**
          * @Description - Json Api
          *
          * @RequestMapping(url="api/product/add",method="POST",type="json")
@@ -203,3 +182,4 @@ EOF;
         }
     }
 }
+?>
