@@ -20,7 +20,7 @@ namespace app\controller {
                 "name" => $name
             );
 
-           $model->assign("profile", $profile);
+            $model->assign("profile", $profile);
 
             return "welcome";
         }
@@ -34,14 +34,14 @@ namespace app\controller {
         public function productsx($model = null, $userid = null)
         {
 
-             $prolist = R::findAll( 'productdetail' , ' ORDER BY id ASC LIMIT 10' );
+            $prolist = R::findAll('productdetail', ' ORDER BY id ASC LIMIT 10');
             //return $prolist;
             $profile = array(
                 "userid" => "789"
             );
 
-           $model->assign("profile", $profile);
-           $model->assign("products", $prolist);
+            $model->assign("profile", $profile);
+            $model->assign("products", $prolist);
 
             return "products";
         }
@@ -80,7 +80,7 @@ namespace app\controller {
             $product['proname'] = $product_name;
             $product['proprice'] = $pro_price;
             $id = R::store($product);
-            $proddetail = R::findOne('productdetail',' id = ? ',array($id));
+            $proddetail = R::findOne('productdetail', ' id = ? ', array($id));
             $proid = $proddetail['id'];
             $pronam = $proddetail['proname'];
             $proprice = $proddetail['proprice'];
@@ -95,7 +95,7 @@ namespace app\controller {
 EOF;
         }
 
-         /**
+        /**
          * @Description - Json Api
          *
          * @RequestMapping(url="api/product/list",method="POST",type="json")
@@ -104,7 +104,7 @@ EOF;
         public function productlist()
         {
 
-            $prolist = R::findAll( 'productdetail' , ' ORDER BY id ASC LIMIT 10 ' );
+            $prolist = R::findAll('productdetail', ' ORDER BY id ASC LIMIT 10 ');
             return $prolist;
         }
 
@@ -117,19 +117,19 @@ EOF;
         public function productlistx()
         {
 
-            $prolist = R::findAll( 'productdetail' , ' ORDER BY id ASC LIMIT 10 ' );
+            $prolist = R::findAll('productdetail', ' ORDER BY id ASC LIMIT 10 ');
             header('Content-Type: text/xml; charset=utf-8');
-             if (count($prolist)) {
-                    foreach ($prolist as $i => $prolist1) {
-            $sCode .= <<<EOF
+            if (count($prolist)) {
+                foreach ($prolist as $i => $prolist1) {
+                    $sCode .= <<<EOF
 <unit>
     <id>{$prolist1['id']}</id>
     <productname>{$prolist1['proname']}</productname>
     <productprice>{$prolist1['proprice']}</productprice>
 </unit>
 EOF;
+                }
             }
-        }
             echo <<<EOF
 <?xml version="1.0" encoding="utf-8"?>
 <product>
@@ -144,35 +144,35 @@ EOF;
          * @RequestMapping(url="api/product/buy",method="POST",type="json")
          * @RequestParams(true)
          */
-        public function productbuy($pro_id = null, $user_id =  null)
+        public function productbuy($pro_id = null, $user_id = null)
         {
-            $prod = R::findOne('productdetail',' id = ? ',array($pro_id));
+            $prod = R::findOne('productdetail', ' id = ? ', array($pro_id));
             $cart = R::dispense("cart");
             $cart['userid'] = $user_id;
             $cart['prodid'] = $pro_id;
             $cart['proname'] = $prod['proname'];
             $cart['proprice'] = $prod['proprice'];
             $cid = R::store($cart);
-            $cartdetail = R::findOne('cart',' id = ? ',array($cid));
-           return $cartdetail;
+            $cartdetail = R::findOne('cart', ' id = ? ', array($cid));
+            return $cartdetail;
         }
 
-         /**
+        /**
          * @Description - XML Api
          *
          * @RequestMapping(url="api/product/buy/xml",method="POST" )
          * @RequestParams(true)
          */
-        public function productbuyx($pro_id = null, $user_id =  null)
+        public function productbuyx($pro_id = null, $user_id = null)
         {
-            $prod = R::findOne('productdetail',' id = ? ',array($pro_id));
+            $prod = R::findOne('productdetail', ' id = ? ', array($pro_id));
             $cart = R::dispense("cart");
             $cart['userid'] = $user_id;
             $cart['prodid'] = $pro_id;
             $cart['proname'] = $prod['proname'];
             $cart['proprice'] = $prod['proprice'];
             $cid = R::store($cart);
-            $cartdetail = R::findOne('cart',' id = ? ',array($cid));
+            $cartdetail = R::findOne('cart', ' id = ? ', array($cid));
             $crtid = $cartdetail['id'];
             $crtusrid = $cartdetail['userid'];
             $crtprodid = $cartdetail['prodid'];
