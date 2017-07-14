@@ -12,12 +12,16 @@
         <td>Action</td>
       </tr>
       {foreach key=pid item=prod from=$productsl}
+      <form action="cart" method="post">
       <tr style="text-align: center;">
         <td>{$prod.id}</td>
         <td>{$prod.proname}</td>
         <td>{$prod.proprice}</td>
-        <td><a href="/cart?userid={$profile1.userid}&prodid={$prod.id}"> BUY </a></td>
+        <input type="hidden" name="userid" value="{$profile1.userid}" />
+        <input type="hidden" name="prodid" value="{$prod.id}" />
+        <td><input type="submit" value="BUY" /></td>
       </tr>
+      </form>
       {/foreach}
     </table>
 </body>

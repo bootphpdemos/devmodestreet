@@ -15,7 +15,7 @@ namespace app\controller {
         public function productsx($model = null, $userid = null)
         {
 
-             $prolist = R::findAll( 'productdetail' , ' ORDER BY id ASC ' );
+             $prolist = R::findAll( 'productdetail' , ' ORDER BY id ASC' );
             //return $prolist;
             $profile1 = array(
                 "userid" => $userid
@@ -30,12 +30,11 @@ namespace app\controller {
         /**
          * @Description - Cart page
          *
-         * @RequestMapping(url="cart",method="GET",type="template")
+         * @RequestMapping(url="cart",method="POST",type="template")
          * @RequestParams(true)
          */
-        public function cartx( $model =null, $userid = null, $prodid = null)
+        public function cartx($model =null, $userid = null, $prodid = null)
         {
-
             if(is_numeric($userid) && $userid != '' && $prodid != ''){
                 $prod = R::findOne('productdetail',' id = ? ',array($prodid));
                 $cart = R::dispense("cart");
@@ -46,8 +45,11 @@ namespace app\controller {
                 $cid = R::store($cart);
                 $cartdetail = R::findOne('cart',' id = ? ',array($cid));
                 $model->assign("cartdetail", $cartdetail);
+                 return "cart";
+            }else{
+            	return "userlogin";
             }
-           return "cart";
+          
         }        
 
 
