@@ -4,7 +4,11 @@
     <title>MS Cart</title>
 </head>
 <body>
-<h3> Welcome User {$cartdetail.userid} </h3>
+{foreach from=$cartdetail key=arrayIndex item=trecord}
+   {$arrayIndex}: {$trecord}
+   <br>
+{/foreach}
+<h3> Welcome User </h3>
     <table width="100%" border="1">
       <tr style="text-align: center;">
         <td>Product Name</td>

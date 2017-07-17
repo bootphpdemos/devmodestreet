@@ -39,13 +39,9 @@ namespace app\controller {
             if (is_numeric($userid) && $userid != '' && $prodid != '') {
                 $prod = R::findOne('productdetail', ' id = ? ', array($prodid));
                 $cart = R::dispense("cart");
-                $cart['userid'] = $userid;
-                $cart['prodid'] = $prodid;
-                $cart['proname'] = $prod['proname'];
-                $cart['proprice'] = $prod['proprice'];
-                $cid = R::store($cart);
-                $cartdetail = R::findOne('cart', ' id = ? ', array($cid));
-                $model->assign("cartdetail", $cartdetail);
+                \app\model\ShoppingCart::addItem($prod,1);
+                $val = \app\model\ShoppingCart::getItems();
+                $model->assign("cartdetail", $val);
                 return "cart";
             } else {
                 return "userlogin";
