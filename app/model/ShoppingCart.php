@@ -17,7 +17,7 @@ use app\service\R;
 class ShoppingCart
 {
     public static $USER_CART = "shoppingcart";
-    public static $USER_CART_ITEM = "cartitem";
+    public static $USER_CART_ITEM = "item";
     public static $USER_CART_ITEM_LINK = "shoppingcartitem";
 
     public static $COOKIE_KEY = "cartid";
@@ -27,15 +27,17 @@ class ShoppingCart
 
     static function init()
     {
-        if (isset($_COOKIE[self::$COOKIE_KEY])) {
-            self::$cart_id = $_COOKIE[self::$COOKIE_KEY];
-            self::$cart = R::load(self::$USER_CART, self::$cart_id);
+        if (empty($cart_id)) {
+            if (isset($_COOKIE[self::$COOKIE_KEY])) {
+                self::$cart_id = $_COOKIE[self::$COOKIE_KEY];
+                self::$cart = R::findOne(self::$USER_CART, "id=?", array(self::$cart_id));
+            }
+            if (empty(self::$cart) || empty(self::$cart->id)) {
+                self::$cart = R::dispense(self::$USER_CART);
+                self::$cart_id = R::store(self::$cart);
+            }
+            setcookie(self::$COOKIE_KEY, self::$cart_id, 0, "/");
         }
-        if (empty(self::$cart) || empty(self::$cart->id)) {
-            self::$cart = R::dispense(self::$USER_CART);
-            self::$cart_id = R::store(self::$cart);
-        }
-        setcookie(self::$COOKIE_KEY, self::$cart_id, 0, "/");
     }
 
     /**
@@ -105,10 +107,21 @@ class ShoppingCart
     static function addItem($cartitem, $quantity = 1)
     {
         ShoppingCart::init();
-        self::$cart->link(self::$USER_CART_ITEM_LINK, array(
-            "quantity" => $quantity
-        ))->cartitem = $cartitem;
-        return R::store(self::$cart);
+        $cartitemEntry = null;
+        if (!empty($cartitem->id)) {
+            $cartitemEntry = R::findOne(self::$USER_CART_ITEM_LINK, sprintf("%s_id=? AND %s_id=?", self::$USER_CART, self::$USER_CART_ITEM),
+                array(self::$cart_id, $cartitem->id)
+            );
+        }
+        if (empty($cartitemEntry)) {
+            $cartitemEntry = R::dispense(self::$USER_CART_ITEM_LINK);
+            $cartitemEntry->quantity = $quantity;
+        } else {
+            $cartitemEntry->quantity = $cartitemEntry->quantity + $quantity;
+        }
+        $cartitemEntry->{self::$USER_CART} = self::$cart;
+        $cartitemEntry->{self::$USER_CART_ITEM} = $cartitem;
+        return R::store($cartitemEntry);
     }
 
     /**
@@ -117,7 +130,7 @@ class ShoppingCart
     static function getItems()
     {
         ShoppingCart::init();
-        $cartitems = self::$cart->via(self::$USER_CART_ITEM_LINK)->sharedCartitemList;
+        $cartitems = self::$cart->{"own" . ucfirst(self::$USER_CART_ITEM_LINK) . "List"};
         return $cartitems;
     }
 
