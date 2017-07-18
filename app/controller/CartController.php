@@ -39,7 +39,7 @@ namespace app\controller {
             if (is_numeric($userid) && $userid != '' && $prodid != '') {
                 $prod = R::findOne('productdetail', ' id = ? ', array($prodid));
                 $cart = R::dispense("cart");
-                \app\model\ShoppingCart::addItem($prod,1);
+               	$cart_id =  \app\model\ShoppingCart::addItem($prod,1);
                 $val = \app\model\ShoppingCart::getItems();
                 $model->assign("cartdetail", $val);
                 return "cart";
