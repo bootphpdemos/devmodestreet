@@ -14,8 +14,12 @@ namespace app\controller {
          * @RequestParams(true)
          */
         public function productsx($model = null, $action = null, $product_id = null,
-                                  $title = null, $description = null)
+                                  $title = null, $description = null, $cart_id=null)
         {
+
+            if(!empty($cart_id)){
+                ShoppingCart::switchToCart($cart_id);
+            }
 
             if ($action == "add2cart") {
                 $product = R::load("product", $product_id);
