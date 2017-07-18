@@ -14,10 +14,10 @@ namespace app\controller {
          * @RequestParams(true)
          */
         public function productsx($model = null, $action = null, $product_id = null,
-                                  $title = null, $description = null, $cart_id=null)
+                                  $title = null, $description = null, $cart_id = null)
         {
 
-            if(!empty($cart_id)){
+            if (!empty($cart_id)) {
                 ShoppingCart::switchToCart($cart_id);
             }
 
@@ -40,33 +40,6 @@ namespace app\controller {
 
             return "test/cart";
         }
-
-        /**
-         * @Description - Cart page
-         *
-         * @RequestMapping(url="cart",method="POST",type="template")
-         * @RequestParams(true)
-         *
-         */
-        public function cartx($model = null, $userid = null, $prodid = null)
-        {
-            if (is_numeric($userid) && $userid != '' && $prodid != '') {
-                $prod = R::findOne('productdetail', ' id = ? ', array($prodid));
-                $cart = R::dispense("cart");
-                $cart['userid'] = $userid;
-                $cart['prodid'] = $prodid;
-                $cart['proname'] = $prod['proname'];
-                $cart['proprice'] = $prod['proprice'];
-                $cid = R::store($cart);
-                $cartdetail = R::findOne('cart', ' id = ? ', array($cid));
-                $model->assign("cartdetail", $cartdetail);
-                return "cart";
-            } else {
-                return "userlogin";
-            }
-
-        }
-
 
     }
 }
