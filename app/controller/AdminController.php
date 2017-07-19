@@ -2,6 +2,7 @@
 namespace app\controller {
 
     use app\service\R;
+    use app\model\PostData;
 
     class AdminController extends AbstractController
     {
@@ -77,12 +78,15 @@ namespace app\controller {
            		// $main_file = $dir_path . basename($_FILES["fileToUpload"]["name"]);
            		// if(move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $main_file)){
 
-           			$addpost = R::dispense("addpost");
-	            	$addpost['title'] = $posttitle;
-	            	$addpost['content'] = $_POST['message'];
-	            	$addpost['imageurl'] = $_POST['linkurl'];
-	            	$id = R::store($addpost);
+           			// $addpost = R::dispense("addpost");
+	            	// $addpost['title'] = $posttitle;
+	            	// $addpost['content'] = $_POST['message'];
+	            	// $addpost['imageurl'] = $_POST['linkurl'];
+	            	// $id = R::store($addpost);
 
+                $postd = PostData::AddPost('9', $posttitle, $_POST['message'], $_POST['linkurl']);
+
+                echo $postd;
            			return "addpostsuccess";
            		// }else{
            		// 	echo "File Not Upload";
