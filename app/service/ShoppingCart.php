@@ -6,9 +6,7 @@
  * Time: 4:03 PM
  */
 
-namespace app\model {
-
-    use app\service\R;
+namespace app\service {
 
     /**
      * Class ShoppingCart <CartItem>
