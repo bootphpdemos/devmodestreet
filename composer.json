@@ -17,7 +17,8 @@
     "php": ">=5.5.0",
     "bootphp/functions": "dev-master",
     "bootphp/rudrax": "dev-master",
-    "rudrax/redbean": "^0.0.0"
+    "rudrax/redbean": "^0.0.0",
+    "php-amqplib/php-amqplib": "^2.6"
   },
   "require-dev": {
     "boilerplatez/docs" : "dev-master"
